@@ -26,7 +26,7 @@ export class tasks1668812011483 implements MigrationInterface {
                     },
                     {
                         name: "deadLine",
-                        type: "timestamp"
+                        type: "date"
                     },
 					{
 						name: "createdAt",
