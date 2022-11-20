@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Task } from "../../tasks/entity/task.entity";
 
 @Entity({ name: "Projects" })
 export class Project {
@@ -10,7 +11,7 @@ export class Project {
 		this.updatedAt = updatedAt;
 	}
 
-	@PrimaryColumn()
+	@PrimaryColumn({type : "varchar"})
 	id: string;
 
 	@Column({ type: "varchar" })
@@ -24,4 +25,7 @@ export class Project {
 
 	@Column({ type: "datetime" })
 	updatedAt: string;
+
+	// @OneToMany(() => Task, (task) => task.projectId)
+	tasks!:Task[]
 }
