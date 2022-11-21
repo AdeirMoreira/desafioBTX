@@ -1,12 +1,11 @@
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class UpdateTaskDto {
-    constructor(name: string, description: string, deadLine: string, completed: boolean, updatedAt?: string) {
+    constructor(name: string, description: string, deadLine: string, completed: boolean) {
 		this.name = name
         this.description = description
         this.deadLine = deadLine
-        this.completed = completed,
-        this.updatedAt = updatedAt
+        this.completed = completed
 	}
 
     @IsOptional()
@@ -24,6 +23,4 @@ export class UpdateTaskDto {
     @IsOptional()
     @IsBoolean({ message: "task completed must be a boolean" })
     completed: boolean;
-
-    updatedAt?: string
 }

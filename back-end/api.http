@@ -3,7 +3,7 @@ POST http://localhost:3003/project
 Content-Type: application/json
 
 {
-    "name":"teste",
+    "name":"test",
     "description":"test"
 }
 
@@ -21,9 +21,9 @@ POST http://localhost:3003/task
 Content-Type: application/json 
 
 {
-    "name":"task",
-    "description":"teste",
-    "deadLine":"2022/11/25",
+    "name":"mock",
+    "description":"teste com dadados mockados",
+    "deadLine":"2023/01/01",
     "projectId":"f84b7bc4-f01f-465d-88c5-8a8889a7e366"
 }
 
@@ -34,13 +34,13 @@ GET http://localhost:3003/task
 GET http://localhost:3003/task/13ba2e2c-d1a4-43ab-986f-5132a1b49070
 
 ### update Task
-PATCH http://localhost:3003/task/35f2ed35-d6be-4992-8925-9825fc48f31a
+PATCH http://localhost:3003/task/28a925bd-ee19-4269-8666-b47ce035b0f5
 Content-Type: application/json
 
 {
     "completed":true,
-    "description":"teste de update de task agora com update de hora",
-    "name":"tentando denovo"
+    "description":null,
+    "name":null
 }
 
 ### delete Task

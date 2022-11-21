@@ -49,8 +49,14 @@ export class ProjectsBusiness {
 	async GetOne(id: string): Promise<Project> {
 		try {
 			let project = await this.projectData.FindOne(id);
+			if(!project) {
+				throw new CustonError(404, "Project not found")
+			}
+
 			project.createdAt = this.FormatLocalDate(new Date(project.createdAt));
 			project.updatedAt = this.FormatLocalDate(new Date(project.updatedAt));
+
+			console.log(project)
 			return project;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
@@ -59,7 +65,12 @@ export class ProjectsBusiness {
 
 	async Delete(id: string) {
 		try {
-			return this.projectData.Delete(id);
+			const project = await this.projectData.FindOne(id)
+			if(!project) {
+				throw new CustonError(404, "Project not found")
+			}
+
+			await this.projectData.Delete(id);
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}

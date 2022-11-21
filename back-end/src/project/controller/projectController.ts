@@ -13,6 +13,8 @@ export class ProjectsController {
 
 		try {
 			const response = await this.projectsBusiness.Register(createProjectDto);
+
+			res.statusMessage = "project created successfully"
 			res.status(201).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
@@ -44,6 +46,8 @@ export class ProjectsController {
 
 		try {
 			const response = await this.projectsBusiness.Delete(id);
+
+			res.statusMessage = "successfully deleted task"
 			res.status(200).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });

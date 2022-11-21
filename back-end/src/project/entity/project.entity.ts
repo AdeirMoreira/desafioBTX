@@ -25,7 +25,4 @@ export class Project {
 
 	@Column({ type: "datetime" })
 	updatedAt: string;
-
-	// @OneToMany(() => Task, (task) => task.projectId)
-	tasks!:Task[]
 }

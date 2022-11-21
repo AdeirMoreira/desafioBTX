@@ -62,6 +62,10 @@ export class TaskBusiness {
 	async GetOne(id: string) {
 		try {
 			let task = await this.taskDatabase.FindOne(id)
+			if(!task) {
+				throw new CustonError(404, "task not found")
+			}
+
 			task.createdAt = this.FormatLocalDate(new Date(task.createdAt))
 			task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt))
 			return task
@@ -74,9 +78,19 @@ export class TaskBusiness {
 		try {
 			await validateOrReject(updateTaskDto);
 
-			updateTaskDto.updatedAt = new Date().toISOString()
+			let task = await this.taskDatabase.FindOne(id)
+			if(!task) {
+				throw new CustonError(404, "task not found")
+			}
+
+			task.name = updateTaskDto.name || task.name
+			task.description = updateTaskDto.description || task.description
+			task.deadline = updateTaskDto.deadLine || task.deadline 
+			task.completed = updateTaskDto.completed || task.completed
 			
-			return this.taskDatabase.Update(updateTaskDto,id)
+			task.updatedAt = new Date().toISOString()
+			
+			await this.taskDatabase.Update(task,id)
 		} catch (error:any) {
 			if (Array.isArray(error)) {
 				this.FormatValidationErrorMessages(error);
@@ -88,7 +102,13 @@ export class TaskBusiness {
 
 	async Delete(id: string) {
 		try {
-			return this.taskDatabase.Delete(id)
+			let task = await this.taskDatabase.FindOne(id)
+
+			if(!task) {
+				throw new CustonError(404, "task not found")
+			}
+
+			await this.taskDatabase.Delete(id)
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}
