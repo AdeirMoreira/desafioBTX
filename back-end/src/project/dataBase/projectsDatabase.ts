@@ -36,7 +36,7 @@ export class ProjectDatabase {
 		}
 	}
 
-	async FindOne(id: string): Promise<Project> {
+	async FindOne(id: string): Promise<Project | null> {
 		try {
 			await this.openConnection();
 
@@ -45,10 +45,6 @@ export class ProjectDatabase {
 
 			await this.closeConnection();
 
-			if (!project) {
-				throw new CustonError(404, "Project not Found");
-			}
-
 			return project;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
@@ -56,17 +52,13 @@ export class ProjectDatabase {
 	}
 
 	async Delete(id: string) {
-		await this.FindOne(id);
-
 		try {
 			await this.openConnection();
 			
 			const repository = this.getProjectRepository();
-			const reponse = await repository.delete({ id });
+			await repository.delete({ id });
 
 			await this.closeConnection();
-
-			return reponse;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}

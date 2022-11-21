@@ -22,7 +22,7 @@ export class TaskDatabase {
 		}
 	}
 
-	async FindAll(): Promise<Task[] | undefined> {
+	async FindAll(): Promise<Task[]> {
 		try {
 			await this.openConnection();
 
@@ -46,45 +46,33 @@ export class TaskDatabase {
 
 			await this.closeConnection();
 
-			if (!task) {
-				throw new CustonError(404, "Task not found");
-			}
-
 			return task;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	async Update(updatedTask: UpdateTaskDto, id: string) {
-		await this.FindOne(id);
-
+	async Update(updatedTask: Task, id: string) {
 		try {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const task = await repository.update(id, updatedTask);
+			await repository.update(id, updatedTask);
 
 			await this.closeConnection();
-
-			return task;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
 	async Delete(id: string) {
-		await this.FindOne(id);
-
 		try {
             await this.openConnection();
 			
 			const repository = this.getProjectRepository();
-			const reponse = await repository.delete({ id });
+			await repository.delete({ id });
 
 			await this.closeConnection();
-
-			return reponse;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
