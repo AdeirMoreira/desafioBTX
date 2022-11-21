@@ -18,6 +18,8 @@ export class TaskController {
 
 		try {
 			const response = await this.taskBusiness.Register(createTaskDto);
+
+			res.statusMessage = "task created successfully"
 			res.status(201).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
@@ -54,8 +56,10 @@ export class TaskController {
 		const id : string = req.params.id
 		
         try {
-            const response = await this.taskBusiness.Update(updateTaskDto, id);
-			res.status(200).send(response);
+            await this.taskBusiness.Update(updateTaskDto, id);
+
+			res.statusMessage = "task updated successfully"
+			res.status(200).send();
         } catch (error:any) {
             res.status(error.statusCode || 400).send({ message: error.message });
         }
@@ -66,6 +70,8 @@ export class TaskController {
 
 		try {
 			const response = await this.taskBusiness.Delete(id);
+
+			res.statusMessage = "successfully deleted task"
 			res.status(200).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
