@@ -1,0 +1,47 @@
+### register Project
+POST http://localhost:3003/project
+Content-Type: application/json
+
+{
+    "name":"teste",
+    "description":"test"
+}
+
+### getAll Projects
+GET http://localhost:3003/project
+
+### get One Project
+GET http://localhost:3003/project/5
+
+### delete Project
+DELETE http://localhost:3003/project/652bd8a0-2537-4698-96bd-5ea6afd97248
+
+### create Task
+POST http://localhost:3003/task
+Content-Type: application/json 
+
+{
+    "name":"task",
+    "description":"teste",
+    "deadLine":"2022/11/25",
+    "projectId":"f84b7bc4-f01f-465d-88c5-8a8889a7e366"
+}
+
+### find all Tasks
+GET http://localhost:3003/task
+
+### find one Task
+GET http://localhost:3003/task/13ba2e2c-d1a4-43ab-986f-5132a1b49070
+
+### update Task
+PATCH http://localhost:3003/task/35f2ed35-d6be-4992-8925-9825fc48f31a
+Content-Type: application/json
+
+{
+    "completed":true,
+    "description":"teste de update de task agora com update de hora",
+    "name":"tentando denovo"
+}
+
+### delete Task
+DELETE http://localhost:3003/task/13ba2e2c-d1a4-43ab-986f-5132a1b49070
