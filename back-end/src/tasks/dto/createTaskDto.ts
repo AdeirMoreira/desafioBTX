@@ -12,11 +12,11 @@ export class CreateTaskDto {
 	@IsString({ message: "task name must be a string" })
 	name: string;
 
-    @IsNotEmpty({ message: "a name for the taks is required" })
-	@IsString({ message: "task name must be a string" })
+    @IsNotEmpty({ message: "a description for the task is required" })
+	@IsString({ message: "task description must be a string" })
 	description: string;
 
-    @IsNotEmpty({ message: "a deadline for the project is required" })
+    @IsNotEmpty({ message: "a deadline for the task is required" })
 	@IsString({ message: "task deadline must be a string" })
 	deadLine: string;
 
