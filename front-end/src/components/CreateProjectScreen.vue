@@ -1,6 +1,8 @@
 import
 <script>
 import { useProjectStore } from "../stores/projects";
+import axios from "axios";
+import {v4 as uuid } from 'uuid'
 
 export default {
 	name: "App",
@@ -15,9 +17,20 @@ export default {
 		closeScreen() {
 			if (this.name !== "" && this.description !== "") {
 				this.$emit("close");
-				const id = Date.now();
+				const id = uuid();
+				this.requestCreateProject({ id, name: this.name, description: this.description });
 				this.addProject({ id, name: this.name, description: this.description });
 			}
+		},
+		requestCreateProject(project) {
+			axios
+				.post(`http://localhost:3003/project`, project)
+				.then((res) => {
+					console.log(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 	},
 
