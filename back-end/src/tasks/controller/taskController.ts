@@ -46,6 +46,17 @@ export class TaskController {
 		}
 	}
 
+	GetAllByProject = async (req: Request, res: Response)=> {
+		const id : string = req.params.id
+
+		try {
+			const response = await this.taskBusiness.GetAllByProject(id);
+			res.status(200).send(response);
+		} catch (error: any) {
+			res.status(error.statusCode || 400).send({ message: error.message });
+		}
+	}
+
     Update = async (req: Request, res: Response) => {
 		const updateTaskDto: UpdateTaskDto = new UpdateTaskDto(
 			req.body.name,

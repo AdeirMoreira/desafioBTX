@@ -52,6 +52,21 @@ export class TaskDatabase {
 		}
 	}
 
+	async FindByProject(id:string){
+		try {
+			await this.openConnection();
+
+			const repository = this.getProjectRepository();
+			const tasks = await repository.find({where: {projectId:id}});
+
+			await this.closeConnection();
+
+			return tasks;
+		} catch (error: any) {
+			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
+		}
+	}
+
 	async Update(updatedTask: Task, id: string) {
 		try {
 			await this.openConnection();

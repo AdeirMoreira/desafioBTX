@@ -21,10 +21,10 @@ POST http://localhost:3003/task
 Content-Type: application/json 
 
 {
-    "name":"mock",
-    "description":"teste com dadados mockados",
-    "deadLine":"2023/01/01",
-    "projectId":"f84b7bc4-f01f-465d-88c5-8a8889a7e366"
+    "name":"mais uma task",
+    "description":"mais uma descrição",
+    "deadLine":"2022/12/31",
+    "projectId":"ff624bda-d1db-49b6-ac6e-68bf61518feb"
 }
 
 ### find all Tasks
@@ -32,6 +32,9 @@ GET http://localhost:3003/task
 
 ### find one Task
 GET http://localhost:3003/task/13ba2e2c-d1a4-43ab-986f-5132a1b49070
+
+### find all Tasks by project
+GET http://localhost:3003/task/project/f84b7bc4-f01f-465d-88c5-8a8889a7e366
 
 ### update Task
 PATCH http://localhost:3003/task/28a925bd-ee19-4269-8666-b47ce035b0f5

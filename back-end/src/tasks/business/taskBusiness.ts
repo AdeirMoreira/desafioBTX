@@ -74,6 +74,25 @@ export class TaskBusiness {
 		}
 	}
 
+	async GetAllByProject(id: string) {
+		try {
+			let project = await this.projectDatabase.FindOne(id)
+			if(!project) {
+				throw new CustonError(404, "project not found")
+			}
+			
+			let tasks = await this.taskDatabase.FindByProject(id)
+			tasks?.map(task => {
+				task.createdAt = this.FormatLocalDate(new Date(task.createdAt))
+				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt))
+			})
+
+			return tasks
+		} catch (error: any) {
+			throw new CustonError(error.statusCode, error.message);
+		}
+	}
+
 	async Update(updateTaskDto: UpdateTaskDto, id: string) {
 		try {
 			await validateOrReject(updateTaskDto);
