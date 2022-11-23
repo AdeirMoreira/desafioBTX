@@ -19,10 +19,15 @@ export default {
 			getProjects,
 			removeProject,
 			setAllProjects,
-			setProjectSelected
+			setProjectSelected,
 		};
 	},
 	methods: {
+		deleteProject(id) {
+			this.requestDeleteProject(id);
+			this.removeProject(id)
+		},
+
 		requestGetAllProjects() {
 			axios
 				.get("http://localhost:3003/project")
@@ -33,10 +38,20 @@ export default {
 					console.log(error);
 				});
 		},
+		requestDeleteProject(id) {
+			axios
+				.delete(`http://localhost:3003/project/${id}`)
+				.then((res) => {
+					console.log(res.data);
+				})
+				.catch((error) => {
+					console.log(error.data);
+				})
+		},
 	},
 	watch: {
 		selected() {
-			this.setProjectSelected(this.selected)
+			this.setProjectSelected(this.selected);
 		},
 	},
 	created() {
@@ -56,7 +71,7 @@ export default {
 		@click="selected = project.id"
 	>
 		<p class="project-name">{{ project.name }}</p>
-		<button @click="removeProject(project.id)">
+		<button @click="deleteProject(project.id)">
 			<img src="../assets/resources/delete.png" alt="icone de lixeira" />
 		</button>
 	</section>
