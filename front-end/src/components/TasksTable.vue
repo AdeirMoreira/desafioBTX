@@ -1,6 +1,8 @@
 <script>
 import { storeToRefs } from "pinia";
+import { useProjectStore } from "../stores/projects";
 import { useTasksStore } from "../stores/tasks";
+import axios from "axios";
 
 export default {
 	name: "App",
@@ -10,14 +12,29 @@ export default {
 		};
 	},
 	setup() {
-		const store = useTasksStore();
-		const { getTasks } = storeToRefs(store);
-		const { removeTask } = store;
+		const taskStore = useTasksStore();
+		const projectStore = useProjectStore();
+		const { getTasks } = storeToRefs(taskStore);
+		const { projectSelectedId } = storeToRefs(projectStore);
+		const { removeTask,setTasks } = taskStore;
 		return {
 			getTasks,
 			removeTask,
+			projectSelectedId,
+			setTasks
 		};
 	},
+	watch: {
+		projectSelectedId(){
+			axios.get(`http://localhost:3003/task/project/${this.projectSelectedId}`)
+			.then(res => {
+				this.setTasks(res.data)
+			}).catch(error => {
+				console.log(error)
+			})
+		}
+	}
+	,
 	methods: {
 		openEditFields(id) {
 			this.select = id;
@@ -76,12 +93,12 @@ export default {
 					<input type="checkbox" v-model="task.completed" v-if="select === task.id" />
 				</th>
 				<th class="button-cell">
-					<Button @click="openEditFields(task.id)" v-if="select !== task.id">
+					<button @click="openEditFields(task.id)" v-if="select !== task.id">
 						<img src="../assets/resources/edit.png" alt="Icone de pincel" />
-					</Button>
-					<Button @click="closeEditFields(task)" v-if="select === task.id">
+					</button>
+					<button @click="closeEditFields(task)" v-if="select === task.id">
 						<img src="../assets/resources/tickIcon.png" alt="Icone de tick" />
-					</Button>
+					</button>
 				</th>
 				<th class="button-cell">
 					<button @click="removeTask(task.id)">

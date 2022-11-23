@@ -1,44 +1,25 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
 export const useProjectStore = defineStore("project", {
-	state: () => ({ projects: [
-        // {
-        //     id:'1',
-        //     name: 'project1'
-        // },
-        // {
-        //     id:'2',
-        //     name: 'project2'
-        // },
-        // {
-        //     id:'3',
-        //     name: 'project3'
-        // },
-        // {
-        //     id:'4',
-        //     name: 'project4'
-        // },
-        // {
-        //     id:'5',
-        //     name: 'project5'
-        // },
-        // {
-        //     id:'6',
-        //     name: 'project6'
-        // }
-    ] }),
+	state: () => ({ projects: [], projectSelectedId: "" }),
 
 	getters: {
-		getProjects: (state) => state.projects 
+		getProjects: (state) => state.projects,
+		getProjectSelected: (state) => state.projectSelectedId,
 	},
 
 	actions: {
-		addProject(project) {
-			this.projects.push(project)
+		setAllProjects(prjects) {
+			this.projects = prjects;
 		},
-        removeProject(id) {
-            console.log(id)
-            this.projects = this.projects.filter(project => project.id !== id)
+		addProject(project) {
+			this.projects.push(project);
+		},
+		removeProject(id) {
+			this.projects = this.projects.filter((project) => project.id !== id);
+		},
+        setProjectSelected(id){
+            this.projectSelectedId = id
         }
 	},
 });

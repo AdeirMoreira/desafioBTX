@@ -1,6 +1,7 @@
 <script>
 import { storeToRefs } from "pinia";
 import { useProjectStore } from "../stores/projects";
+import axios from "axios";
 
 export default {
 	name: "App",
@@ -13,11 +14,33 @@ export default {
 	setup() {
 		const store = useProjectStore();
 		const { getProjects } = storeToRefs(store);
-		const { removeProject } = store;
+		const { removeProject, setAllProjects, setProjectSelected } = store;
 		return {
 			getProjects,
 			removeProject,
+			setAllProjects,
+			setProjectSelected
 		};
+	},
+	methods: {
+		requestGetAllProjects() {
+			axios
+				.get("http://localhost:3003/project")
+				.then((res) => {
+					this.setAllProjects(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+	},
+	watch: {
+		selected() {
+			this.setProjectSelected(this.selected)
+		},
+	},
+	created() {
+		this.requestGetAllProjects();
 	},
 };
 </script>
@@ -50,7 +73,6 @@ export default {
 
 .project-container-selected {
 	background-color: rgb(0, 153, 102);
-	
 }
 .project-name {
 	margin: 0;

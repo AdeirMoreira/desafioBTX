@@ -8,6 +8,9 @@ import CreateProjectScreen from "./components/CreateProjectScreen.vue";
 </script>
 
 <script>
+import axios from 'axios'
+import { useProjectStore } from "./stores/projects";
+import { storeToRefs } from "pinia";
 export default {
 	name: "App",
 	data() {
