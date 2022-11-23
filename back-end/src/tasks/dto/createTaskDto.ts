@@ -1,12 +1,17 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateTaskDto {
-	constructor(name: string, description: string, deadLine: string, projectId: string) {
+	constructor(id: string, name: string, description: string, deadLine: string, projectId: string) {
 		this.name = name, 
         this.description = description, 
         this.deadLine = deadLine;
 		this.projectId = projectId
+		this.id = id
 	}
+
+	@IsNotEmpty({ message: "a id for the task is required" })
+	@IsString({ message: "task id must be a string" })
+	id: string;
 
     @IsNotEmpty({ message: "a name for the task is required" })
 	@IsString({ message: "task name must be a string" })

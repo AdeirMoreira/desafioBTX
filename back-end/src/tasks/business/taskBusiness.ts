@@ -11,18 +11,16 @@ export class TaskBusiness {
 	constructor(
 		private taskDatabase: TaskDatabase,
 		private projectDatabase: ProjectDatabase,
-		private uuidService: Uuid
 	) {}
 
 	async Register(createTaskDto: CreateTaskDto) {
 		try {
 			await validateOrReject(createTaskDto);
 
-			const { name, description, deadLine, projectId } = createTaskDto;
+			const { id, name, description, deadLine, projectId } = createTaskDto;
 
 			await this.FindProject(projectId);
 
-			const id = this.uuidService.generate();
 			const completed = false;
 			const createdAt = new Date().toISOString();
 			const newTask: Task = new Task(
@@ -160,4 +158,4 @@ export class TaskBusiness {
 	}
 }
 
-export default new TaskBusiness(taskDatabase, projectsDatabase, uuid);
+export default new TaskBusiness(taskDatabase, projectsDatabase);

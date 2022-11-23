@@ -1,19 +1,18 @@
 import { validateOrReject } from "class-validator";
 import { CustonError } from "../../model/custonError";
-import uuid, { Uuid } from "../../services/Uuid";
 import projectsDatabase, { ProjectDatabase } from "../dataBase/projectsDatabase";
 import { CreateProjectDto } from "../dto/createProjectDto";
 import { Project } from "../entity/project.entity";
 
 export class ProjectsBusiness {
-	constructor(private projectData: ProjectDatabase, private uuidService: Uuid) {}
+	constructor(private projectData: ProjectDatabase) {}
 
 	async Register(createProjectDto: CreateProjectDto): Promise<Project | undefined> {
 		try {
 			await validateOrReject(createProjectDto);
 
-			const id = this.uuidService.generate();
-			const { name, description } = createProjectDto;
+			
+			const { id,name, description } = createProjectDto;
 			const newProject = new Project(
 				id,
 				name,
@@ -92,4 +91,4 @@ export class ProjectsBusiness {
 	}
 }
 
-export default new ProjectsBusiness(projectsDatabase, uuid);
+export default new ProjectsBusiness(projectsDatabase);

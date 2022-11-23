@@ -1,5 +1,4 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
-import { Task } from "../../tasks/entity/task.entity";
 
 @Entity({ name: "Projects" })
 export class Project {

@@ -10,6 +10,7 @@ export class TaskController {
 	
     Register = async (req: Request, res: Response): Promise<void> => {
 		const createTaskDto: CreateTaskDto = new CreateTaskDto(
+			req.body.id,
 			req.body.name,
 			req.body.description,
 			req.body.deadLine,
