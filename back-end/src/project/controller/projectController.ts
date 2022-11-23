@@ -7,6 +7,7 @@ export class ProjectsController {
 
 	Register = async (req: Request, res: Response): Promise<void> => {
 		const createProjectDto: CreateProjectDto = new CreateProjectDto(
+			req.body.id,
 			req.body.name,
 			req.body.description
 		);

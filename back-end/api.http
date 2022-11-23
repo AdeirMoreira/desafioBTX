@@ -3,8 +3,9 @@ POST http://localhost:3003/project
 Content-Type: application/json
 
 {
-    "name":"test",
-    "description":"test"
+    "id":"id",
+    "name":"projeto",
+    "description":"descrição"
 }
 
 ### getAll Projects
@@ -21,8 +22,9 @@ POST http://localhost:3003/task
 Content-Type: application/json 
 
 {
-    "name":"mais uma task",
-    "description":"mais uma descrição",
+    "id":"id",
+    "name":"task com id",
+    "description":"o id dessa task foi gerado no front-end",
     "deadLine":"2022/12/31",
     "projectId":"ff624bda-d1db-49b6-ac6e-68bf61518feb"
 }
