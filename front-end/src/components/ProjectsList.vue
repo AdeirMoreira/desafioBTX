@@ -25,7 +25,7 @@ export default {
 	methods: {
 		deleteProject(id) {
 			this.requestDeleteProject(id);
-			this.removeProject(id)
+			this.removeProject(id);
 		},
 
 		requestGetAllProjects() {
@@ -35,7 +35,7 @@ export default {
 					this.setAllProjects(res.data);
 				})
 				.catch((error) => {
-					console.log(error);
+					console.log(error.response);
 				});
 		},
 		requestDeleteProject(id) {
@@ -46,7 +46,7 @@ export default {
 				})
 				.catch((error) => {
 					console.log(error.data);
-				})
+				});
 		},
 	},
 	watch: {
@@ -61,29 +61,39 @@ export default {
 </script>
 
 <template>
-	<section
-		v-for="project in getProjects"
-		:class="{
-			'project-container': true,
-			'project-container-selected': selected === project.id,
-		}"
-		:key="project.id"
-		@click="selected = project.id"
-	>
-		<p class="project-name">{{ project.name }}</p>
-		<button @click="deleteProject(project.id)">
+	<section class="project-section" v-for="project in getProjects">
+		<div
+			:class="{
+				'project-container': true,
+				'project-container-selected': selected === project.id,
+			}"
+			:key="project.id"
+			@click="selected = project.id"
+		>
+			<p class="project-name">{{ project.name }}</p>
+		</div>
+		<button
+			:class="{ 'project-container-selected': selected === project.id }"
+			@click="deleteProject(project.id)"
+			type="button"
+		>
 			<img src="../assets/resources/delete.png" alt="icone de lixeira" />
 		</button>
 	</section>
 </template>
 
 <style scoped>
-.project-container {
-	background-color: rgb(220, 220, 220);
+.project-section {
 	display: flex;
 	flex-direction: row;
+	width: 100%;
 	justify-content: space-between;
-	padding: 1em;
+	background-color: rgb(220, 220, 220);
+}
+.project-container {
+	background-color: rgb(220, 220, 220);
+	padding: 0.5em 0 0.5em 0.5em;
+	width: 100%;
 }
 
 .project-container-selected {
@@ -98,5 +108,7 @@ export default {
 button {
 	background-color: transparent;
 	border: none;
+	margin: 0;
+	padding: 0.5em 0.5em 0.5em 0;
 }
 </style>

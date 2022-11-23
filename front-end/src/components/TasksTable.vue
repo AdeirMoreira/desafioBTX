@@ -16,38 +16,50 @@ export default {
 		const projectStore = useProjectStore();
 		const { getTasks } = storeToRefs(taskStore);
 		const { projectSelectedId } = storeToRefs(projectStore);
-		const { removeTask,setTasks } = taskStore;
+		const { removeTask, setTasks } = taskStore;
 		return {
 			getTasks,
 			removeTask,
 			projectSelectedId,
-			setTasks
+			setTasks,
 		};
 	},
 	watch: {
-		projectSelectedId(){
-			axios.get(`http://localhost:3003/task/project/${this.projectSelectedId}`)
-			.then(res => {
-				this.setTasks(res.data)
-			}).catch(error => {
-				console.log(error)
-			})
-		}
-	}
-	,
+		projectSelectedId() {
+			this.requestgetTasksByProject();
+		},
+	},
 	methods: {
 		openEditFields(id) {
 			this.select = id;
 		},
 		closeEditFields(task) {
 			this.select = "";
-			task.deadline = task.deadline.split("-").reverse().join("/");
+			task.deadLine = task.deadLine.split("-").reverse().join("/");
+		},
+		requestgetTasksByProject() {
+			axios
+				.get(`http://localhost:3003/task/project/${this.projectSelectedId}`)
+				.then((res) => {
+					this.setTasks(res.data);
+				})
+				.catch((error) => {
+					console.log(error.response);
+				});
 		},
 	},
 };
 </script>
 
 <template>
+	<div class="no-task-screen" v-if="getTasks.length === 0">
+		<div class="message-container">
+			<img src="../assets/resources/verified.png" alt="Icone de prancheta" />
+			<p class="big-paragraph">Sem tarefas</p>
+			<p class="small-paragraph">Adcione uma tarefa ao projeto</p>
+		</div>
+	</div>
+
 	<table class="task-table">
 		<thead class="task-table-title">
 			<tr>
@@ -81,10 +93,9 @@ export default {
 					<p class="font" v-if="select !== task.id">{{ task.description }}</p>
 					<input v-if="select === task.id" v-model="task.description" />
 				</th>
-
 				<th class="date-cell">
-					<p class="font" v-if="select !== task.id">{{ task.deadline }}</p>
-					<input type="date" v-if="select === task.id" v-model="task.deadline" />
+					<p class="font" v-if="select !== task.id">{{ task.deadLine }}</p>
+					<input type="date" v-if="select === task.id" v-model="task.deadLine" />
 				</th>
 				<th class="checkbox-cell">
 					<p class="font" v-if="select !== task.id">
@@ -147,5 +158,36 @@ th input {
 button {
 	background-color: transparent;
 	border: none;
+}
+
+.no-task-screen {
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.message-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.message-container img {
+	width: 5em;
+	height: 5em;
+}
+
+.big-paragraph {
+	font-size: 3em;
+	font-weight: 700;
+}
+
+.small-paragraph {
+	font-size: 2em;
+	font-weight: 700;
 }
 </style>
