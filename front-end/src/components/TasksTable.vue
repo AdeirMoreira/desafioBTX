@@ -47,6 +47,20 @@ export default {
 					console.log(error.response);
 				});
 		},
+		deleteTask(id){
+			this.removeTask(id)
+			this.requestDeleteTask(id)
+		},
+		requestDeleteTask(id){
+			axios
+				.delete(`http://localhost:3003/task/${id}`)
+				.then((res) => {
+					console.log(res.data)
+				})
+				.catch((error) => {
+					console.log(error.response);
+				});
+		}
 	},
 };
 </script>
@@ -60,7 +74,7 @@ export default {
 		</div>
 	</div>
 
-	<table class="task-table">
+	<table class="task-table" v-if="getTasks.length !== 0">
 		<thead class="task-table-title">
 			<tr>
 				<th class="font text-cell">
@@ -112,7 +126,7 @@ export default {
 					</button>
 				</th>
 				<th class="button-cell">
-					<button @click="removeTask(task.id)">
+					<button @click="deleteTask(task.id)">
 						<img src="../assets/resources/delete.png" alt="Icone de lixeira" />
 					</button>
 				</th>
