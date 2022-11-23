@@ -1,16 +1,12 @@
 <script setup>
 import ToDoAppHeander from "./components/ToDoAppHeaader.vue";
 import ProjetsList from "./components/ProjectsList.vue";
-import NoTaskScreen from "./components/NoProjectScreen.vue";
 import TasksTable from "./components/TasksTable.vue";
 import CreateTaskScreen from "./components/CreateTaskScreen.vue";
 import CreateProjectScreen from "./components/CreateProjectScreen.vue";
 </script>
 
 <script>
-import axios from 'axios'
-import { useProjectStore } from "./stores/projects";
-import { storeToRefs } from "pinia";
 export default {
 	name: "App",
 	data() {
@@ -47,7 +43,6 @@ export default {
 			<ProjetsList />
 		</section>
 		<section class="tasks">
-			<!-- <NoTaskScreen/> -->
 			<TasksTable/>
 		</section>
 		<CreateProjectScreen

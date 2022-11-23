@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 export const useProjectStore = defineStore("project", {
-	state: () => ({ projects: [], projectSelectedId: "" }),
+	state: () => ({ projects: [], projectSelectedId: null }),
 
 	getters: {
 		getProjects: (state) => state.projects,

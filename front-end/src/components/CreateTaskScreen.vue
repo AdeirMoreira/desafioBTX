@@ -1,5 +1,9 @@
 <script>
+import { storeToRefs } from "pinia";
+import { useProjectStore } from "../stores/projects";
 import { useTasksStore } from "../stores/tasks";
+import { v4 as uuid } from "uuid";
+import axios from "axios";
 
 export default {
 	name: "App",
@@ -7,33 +11,51 @@ export default {
 		return {
 			name: "",
 			description: "",
-			deadline: "",
+			deadLine: "",
 			completed: false,
 		};
 	},
 
 	methods: {
 		closeScreen() {
-			if (this.name !== "" && this.description !== "" && this.deadline !== "") {
+			if (this.name !== "" && this.description !== "" && this.deadLine !== "") {
 				this.$emit("close");
-				const id = Date.now();
-				this.deadline = this.deadline.split("-").reverse().join("/");
+				const id = uuid();
+				this.requestCreateTask({
+					id,
+					name: this.name,
+					description: this.description,
+					deadLine: this.deadLine,
+					completed: this.completed,
+					projectId: this.projectSelectedId,
+				});
 				this.addTask({
 					id,
 					name: this.name,
 					description: this.description,
-					deadline: this.deadline,
+					deadLine: this.deadLine.split("-").reverse().join("/"),
 					completed: this.completed,
 				});
 			}
 		},
+		requestCreateTask(task) {
+			axios
+				.post(`http://localhost:3003/task`, task)
+				.then((res) => {
+					console.log(res.data);
+				})
+				.catch((error) => console.log(error));
+		},
 	},
 
 	setup() {
-		const store = useTasksStore();
-		const { addTask } = store;
+		const taskstore = useTasksStore();
+		const projectStore = useProjectStore();
+		const { addTask } = taskstore;
+		const { projectSelectedId } = storeToRefs(projectStore);
 		return {
 			addTask,
+			projectSelectedId,
 		};
 	},
 };
@@ -54,7 +76,7 @@ export default {
 				<p>Descrição</p>
 				<input type="text" v-model="description" />
 				<p>Prazo</p>
-				<input type="date" v-model="deadline" />
+				<input type="date" v-model="deadLine" />
 			</div>
 		</div>
 	</div>
