@@ -8,10 +8,7 @@ import { UpdateTaskDto } from "../dto/updatedTaskDto";
 import { Task } from "../entity/task.entity";
 
 export class TaskBusiness {
-	constructor(
-		private taskDatabase: TaskDatabase,
-		private projectDatabase: ProjectDatabase,
-	) {}
+	constructor(private taskDatabase: TaskDatabase, private projectDatabase: ProjectDatabase) {}
 
 	async Register(createTaskDto: CreateTaskDto) {
 		try {
@@ -46,12 +43,13 @@ export class TaskBusiness {
 
 	async GetAll() {
 		try {
-			let tasks = await this.taskDatabase.FindAll()
-			tasks?.map(task => {
-				task.createdAt = this.FormatLocalDate(new Date(task.createdAt))
-				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt))
-			})
-			return tasks
+			let tasks = await this.taskDatabase.FindAll();
+			tasks?.map((task) => {
+				task.deadline = this.InverterDayYear(task.deadline)
+				task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
+				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
+			});
+			return tasks;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}
@@ -59,14 +57,15 @@ export class TaskBusiness {
 
 	async GetOne(id: string) {
 		try {
-			let task = await this.taskDatabase.FindOne(id)
-			if(!task) {
-				throw new CustonError(404, "task not found")
+			let task = await this.taskDatabase.FindOne(id);
+			if (!task) {
+				throw new CustonError(404, "task not found");
 			}
 
-			task.createdAt = this.FormatLocalDate(new Date(task.createdAt))
-			task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt))
-			return task
+			task.deadline = this.InverterDayYear(task.deadline)
+			task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
+			task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
+			return task;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}
@@ -74,18 +73,19 @@ export class TaskBusiness {
 
 	async GetAllByProject(id: string) {
 		try {
-			let project = await this.projectDatabase.FindOne(id)
-			if(!project) {
-				throw new CustonError(404, "project not found")
+			let project = await this.projectDatabase.FindOne(id);
+			if (!project) {
+				throw new CustonError(404, "project not found");
 			}
-			
-			let tasks = await this.taskDatabase.FindByProject(id)
-			tasks?.map(task => {
-				task.createdAt = this.FormatLocalDate(new Date(task.createdAt))
-				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt))
-			})
 
-			return tasks
+			let tasks = await this.taskDatabase.FindByProject(id);
+			tasks?.map((task) => {
+				task.deadline = this.InverterDayYear(task.deadline)
+				task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
+				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
+			});
+
+			return tasks;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}
@@ -95,20 +95,20 @@ export class TaskBusiness {
 		try {
 			await validateOrReject(updateTaskDto);
 
-			let task = await this.taskDatabase.FindOne(id)
-			if(!task) {
-				throw new CustonError(404, "task not found")
+			let task = await this.taskDatabase.FindOne(id);
+			if (!task) {
+				throw new CustonError(404, "task not found");
 			}
 
-			task.name = updateTaskDto.name || task.name
-			task.description = updateTaskDto.description || task.description
-			task.deadline = updateTaskDto.deadLine || task.deadline 
-			task.completed = updateTaskDto.completed || task.completed
-			
-			task.updatedAt = new Date().toISOString()
-			
-			await this.taskDatabase.Update(task,id)
-		} catch (error:any) {
+			task.name = updateTaskDto.name || task.name;
+			task.description = updateTaskDto.description || task.description;
+			task.deadline = updateTaskDto.deadLine || task.deadline;
+			task.completed = updateTaskDto.completed || task.completed;
+
+			task.updatedAt = new Date().toISOString();
+
+			await this.taskDatabase.Update(task, id);
+		} catch (error: any) {
 			if (Array.isArray(error)) {
 				this.FormatValidationErrorMessages(error);
 			} else {
@@ -119,13 +119,13 @@ export class TaskBusiness {
 
 	async Delete(id: string) {
 		try {
-			let task = await this.taskDatabase.FindOne(id)
+			let task = await this.taskDatabase.FindOne(id);
 
-			if(!task) {
-				throw new CustonError(404, "task not found")
+			if (!task) {
+				throw new CustonError(404, "task not found");
 			}
 
-			await this.taskDatabase.Delete(id)
+			await this.taskDatabase.Delete(id);
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}
@@ -140,6 +140,10 @@ export class TaskBusiness {
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}
+	}
+
+	private InverterDayYear(date:string){
+		return date.split("-").reverse().join("/");
 	}
 
 	private FormatLocalDate(date: Date) {
