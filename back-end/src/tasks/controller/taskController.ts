@@ -4,11 +4,9 @@ import { CreateTaskDto } from "../dto/createTaskDto";
 import { UpdateTaskDto } from "../dto/updatedTaskDto";
 
 export class TaskController {
-	constructor(
-		private taskBusiness: TaskBusiness
-	){}
-	
-    Register = async (req: Request, res: Response): Promise<void> => {
+	constructor(private taskBusiness: TaskBusiness) {}
+
+	Register = async (req: Request, res: Response): Promise<void> => {
 		const createTaskDto: CreateTaskDto = new CreateTaskDto(
 			req.body.id,
 			req.body.name,
@@ -20,24 +18,24 @@ export class TaskController {
 		try {
 			const response = await this.taskBusiness.Register(createTaskDto);
 
-			res.statusMessage = "task created successfully"
+			res.statusMessage = "task created successfully";
 			res.status(201).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
 		}
 	};
 
-	GetAll = async (req: Request, res: Response)=> {
+	GetAll = async (req: Request, res: Response) => {
 		try {
 			const response = await this.taskBusiness.GetAll();
 			res.status(200).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
 		}
-	}
+	};
 
 	GetOne = async (req: Request, res: Response) => {
-		const id : string = req.params.id
+		const id: string = req.params.id;
 
 		try {
 			const response = await this.taskBusiness.GetOne(id);
@@ -45,10 +43,10 @@ export class TaskController {
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
 		}
-	}
+	};
 
-	GetAllByProject = async (req: Request, res: Response)=> {
-		const id : string = req.params.id
+	GetAllByProject = async (req: Request, res: Response) => {
+		const id: string = req.params.id;
 
 		try {
 			const response = await this.taskBusiness.GetAllByProject(id);
@@ -56,34 +54,34 @@ export class TaskController {
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
 		}
-	}
+	};
 
-    Update = async (req: Request, res: Response) => {
+	Update = async (req: Request, res: Response) => {
 		const updateTaskDto: UpdateTaskDto = new UpdateTaskDto(
 			req.body.name,
 			req.body.description,
 			req.body.deadLine,
-			req.body.completed,
-		)
-		const id : string = req.params.id
-		
-        try {
-            await this.taskBusiness.Update(updateTaskDto, id);
+			req.body.completed
+		);
+		const id: string = req.params.id;
 
-			res.statusMessage = "task updated successfully"
+		try {
+			await this.taskBusiness.Update(updateTaskDto, id);
+
+			res.statusMessage = "task updated successfully";
 			res.status(200).send();
-        } catch (error:any) {
-            res.status(error.statusCode || 400).send({ message: error.message });
-        }
-    }
+		} catch (error: any) {
+			res.status(error.statusCode || 400).send({ message: error.message });
+		}
+	};
 
 	Delete = async (req: Request, res: Response): Promise<void> => {
-		const id : string = req.params.id
+		const id: string = req.params.id;
 
 		try {
 			const response = await this.taskBusiness.Delete(id);
 
-			res.statusMessage = "successfully deleted task"
+			res.statusMessage = "successfully deleted task";
 			res.status(200).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
@@ -91,4 +89,4 @@ export class TaskController {
 	};
 }
 
-export default new TaskController(taskBusiness)
+export default new TaskController(taskBusiness);
