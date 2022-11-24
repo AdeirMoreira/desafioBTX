@@ -1,18 +1,53 @@
 import { ProjectsBusiness } from "../src/project/business/projectsBusiness";
 import { CreateProjectDto } from "../src/project/dto/createProjectDto";
 import projectDatabaseMock from "./mocks/projectDatabaseMock";
-import uuidMock from "./mocks/uuidMock";
 
 const projectBusinessBusinessMock = new ProjectsBusiness(
 	// @ts-ignore suprime o erro "projectDataBase contem metodos privados"
 	projectDatabaseMock,
-	uuidMock
 );
 
 describe("class ProjectBusiness test", () => {
 	describe("Register method test", () => {
+		
+		it("missing project id test", async () => {
+			const badProject = new CreateProjectDto(null as unknown as string, 'test', "description");
+			try {
+				await projectBusinessBusinessMock.Register(badProject);
+			} catch (error: any) {
+				expect(error.message).toBe(
+					"project id must be a string and a id for the project is required."
+				);
+				expect(error.statusCode).toBe(422);
+			}
+		});
+
+		it("empety project id test", async () => {
+			const badProject = new CreateProjectDto('',"test", "description");
+			try {
+				await projectBusinessBusinessMock.Register(badProject);
+			} catch (error: any) {
+				expect(error.message).toBe(
+					"a id for the project is required."
+				);
+				expect(error.statusCode).toBe(422);
+			}
+		});
+
+		it("project id not string test", async () => {
+			const badProject = new CreateProjectDto(5 as unknown as string, 'test', "description");
+			try {
+				await projectBusinessBusinessMock.Register(badProject);
+			} catch (error: any) {
+				expect(error.message).toBe(
+					"project id must be a string."
+				);
+				expect(error.statusCode).toBe(422);
+			}
+		});
+		
 		it("missing project name test", async () => {
-			const badProject = new CreateProjectDto(null as unknown as string, "description");
+			const badProject = new CreateProjectDto('id', null as unknown as string, "description");
 			try {
 				await projectBusinessBusinessMock.Register(badProject);
 			} catch (error: any) {
@@ -24,7 +59,7 @@ describe("class ProjectBusiness test", () => {
 		});
 
 		it("empety project name test", async () => {
-			const badProject = new CreateProjectDto("", "description");
+			const badProject = new CreateProjectDto('id',"", "description");
 			try {
 				await projectBusinessBusinessMock.Register(badProject);
 			} catch (error: any) {
@@ -36,7 +71,7 @@ describe("class ProjectBusiness test", () => {
 		});
 
 		it("project name not string test", async () => {
-			const badProject = new CreateProjectDto(5 as unknown as string, "description");
+			const badProject = new CreateProjectDto('id', 5 as unknown as string, "description");
 			try {
 				await projectBusinessBusinessMock.Register(badProject);
 			} catch (error: any) {
@@ -48,7 +83,7 @@ describe("class ProjectBusiness test", () => {
 		});
 
 		it("missing project description test", async () => {
-			const badProject = new CreateProjectDto("test", null as unknown as string);
+			const badProject = new CreateProjectDto('id',"test", null as unknown as string);
 			try {
 				await projectBusinessBusinessMock.Register(badProject);
 			} catch (error: any) {
@@ -60,7 +95,7 @@ describe("class ProjectBusiness test", () => {
 		});
 
 		it("empety project description test", async () => {
-			const badProject = new CreateProjectDto("test", "");
+			const badProject = new CreateProjectDto('id',"test", "");
 			try {
 				await projectBusinessBusinessMock.Register(badProject);
 			} catch (error: any) {
@@ -72,7 +107,7 @@ describe("class ProjectBusiness test", () => {
 		});
 
 		it("project description not string test", async () => {
-			const badProject = new CreateProjectDto("test", 5 as unknown as string);
+			const badProject = new CreateProjectDto('id',"test", 5 as unknown as string);
 			try {
 				await projectBusinessBusinessMock.Register(badProject);
 			} catch (error: any) {
@@ -84,9 +119,9 @@ describe("class ProjectBusiness test", () => {
 		});
 
 		it("successful creation test", async () => {
-			const goodProject = new CreateProjectDto("test", "test")
+			const goodProject = new CreateProjectDto('id',"test", "test")
 			const response = await projectBusinessBusinessMock.Register(goodProject)
-			expect(response?.id).toBe('uuid')
+			expect(response?.id).toBe('id')
 			expect(response?.name).toBe('test')
 			expect(response?.description).toBe("test")
 			expect(response?.createdAt).toBe(new Date(response?.createdAt as string).toISOString())

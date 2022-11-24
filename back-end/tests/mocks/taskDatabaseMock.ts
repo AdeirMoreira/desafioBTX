@@ -1,11 +1,7 @@
-import { DataSource } from "typeorm/data-source/DataSource";
 import { Task } from "../../src/tasks/entity/task.entity";
-import { dataSourcemock } from "./datasourceMock";
-import { task1, task2 } from "./tasksMocks";
+import { task1, task2, task3 } from "./tasksMocks";
 
 class TaskDatabaseMock {
-    constructor(private appDataSource: DataSource) {}
-
 	async Create(newTask: Task): Promise<Task> {
 		return task1
 	}
@@ -20,20 +16,17 @@ class TaskDatabaseMock {
 		}
 	}
 
+	async FindByProject(id: string):Promise<Task[]> {
+		if(id=== 'id5'){
+			return [task2,task3]
+		} else {
+			return []
+		}
+	}
+
 	async Update(updatedTask: Task, id: string) {}
 
 	async Delete(id: string) {}
-
-	private getProjectRepository() {
-		return this.appDataSource.getRepository(Task);
-	}
-
-	private async openConnection(): Promise<void> {
-		!this.appDataSource.isInitialized && (await this.appDataSource.initialize());
-	}
-	private async closeConnection(): Promise<void> {
-		this.appDataSource.isInitialized && (await this.appDataSource.destroy());
-	}
 }
 
-export default new TaskDatabaseMock(dataSourcemock)
+export default new TaskDatabaseMock()
