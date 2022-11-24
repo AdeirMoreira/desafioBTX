@@ -1,5 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
-import { Project } from "../../project/entity/project.entity";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "Tasks" })
 export class Task {
@@ -45,6 +44,5 @@ export class Task {
 	updatedAt: string;
 
 	@Column({ type: "varchar" })
-	// @ManyToOne(() => Project, (project) => project.id)
 	projectId?: string;
 }

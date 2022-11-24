@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { AppDataSource } from "../../data-source/data-source";
 import { CustonError } from "../../model/custonError";
 import { Project } from "../entity/project.entity";
@@ -11,26 +11,22 @@ export class ProjectDatabase {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const result = await repository.save(newProject);
+			const response = await repository.save(newProject);
 
-			await this.closeConnection();
-
-			return result;
+			return this.assignProject(response)
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	async FindAll() {
+	async FindAll():Promise<Project[]> {
 		try {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const projects = await repository.find();
+			const response = await repository.find();
 
-			await this.closeConnection();
-
-			return projects;
+			return response.map(project => this.assignProject(project))
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
@@ -41,11 +37,13 @@ export class ProjectDatabase {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const project = await repository.findOne({ where: { id } });
+			const response = await repository.findOne({ where: { id } });
 
-			await this.closeConnection();
-
-			return project;
+			if(response) {
+				return this.assignProject(response)
+			} else {
+				return response
+			}
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
@@ -57,22 +55,27 @@ export class ProjectDatabase {
 			
 			const repository = this.getProjectRepository();
 			await repository.delete({ id });
-
-			await this.closeConnection();
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	private getProjectRepository() {
+	private assignProject(task: Project):Project{
+		return new Project(
+			task.id,
+			task.name,
+			task.description,
+			task.createdAt,
+			task.updatedAt,
+		);
+	}
+
+	private getProjectRepository():Repository<Project> {
 		return this.appDataSource.getRepository(Project);
 	}
 
 	private async openConnection(): Promise<void> {
 		!this.appDataSource.isInitialized && (await this.appDataSource.initialize());
-	}
-	private async closeConnection(): Promise<void> {
-		this.appDataSource.isInitialized && (await this.appDataSource.destroy());
 	}
 }
 

@@ -1,7 +1,6 @@
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { AppDataSource } from "../../data-source/data-source";
 import { CustonError } from "../../model/custonError";
-import { UpdateTaskDto } from "../dto/updatedTaskDto";
 import { Task } from "../entity/task.entity";
 
 export class TaskDatabase {
@@ -12,11 +11,9 @@ export class TaskDatabase {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const result = await repository.save(newTask);
+			const response = await repository.save(newTask);
 
-			await this.closeConnection();
-
-			return result;
+			return this.assignTask(response)
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
@@ -27,81 +24,84 @@ export class TaskDatabase {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const tasks = await repository.find();
+			const response = await repository.find();
 
-			await this.closeConnection();
-
-			return tasks;
+			return response.map(task => this.assignTask(task))
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	async FindOne(id: string) {
+	async FindOne(id: string):Promise<Task | null> {
 		try {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const task = await repository.findOne({ where: { id } });
-
-			await this.closeConnection();
-
-			return task;
+			let response = await repository.findOne({ where: { id } });
+			if(response) {
+				return this.assignTask(response)
+			} else {
+				return response
+			}
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	async FindByProject(id:string){
+	async FindByProject(id: string):Promise<Task[]> {
 		try {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
-			const tasks = await repository.find({where: {projectId:id}});
+			const response = await repository.find({ where: { projectId: id } });
 
-			await this.closeConnection();
-
-			return tasks;
+			return response.map(task => this.assignTask(task))
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	async Update(updatedTask: Task, id: string) {
+	async Update(updatedTask: Task, id: string):Promise<void> {
 		try {
 			await this.openConnection();
 
 			const repository = this.getProjectRepository();
 			await repository.update(id, updatedTask);
-
-			await this.closeConnection();
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	async Delete(id: string) {
+	async Delete(id: string):Promise<void> {
 		try {
-            await this.openConnection();
-			
+			await this.openConnection();
+
 			const repository = this.getProjectRepository();
 			await repository.delete({ id });
-
-			await this.closeConnection();
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
 	}
 
-	private getProjectRepository() {
+	private assignTask(task: Task):Task{
+		return new Task(
+			task.id,
+			task.name,
+			task.description,
+			task.completed,
+			task.deadLine,
+			task.createdAt,
+			task.updatedAt,
+			task.projectId as string
+		);
+	}
+
+	private getProjectRepository():Repository<Task> {
 		return this.appDataSource.getRepository(Task);
 	}
 
 	private async openConnection(): Promise<void> {
 		!this.appDataSource.isInitialized && (await this.appDataSource.initialize());
-	}
-	private async closeConnection(): Promise<void> {
-		this.appDataSource.isInitialized && (await this.appDataSource.destroy());
 	}
 }
 

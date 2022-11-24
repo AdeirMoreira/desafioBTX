@@ -1,7 +1,6 @@
 import { validateOrReject } from "class-validator";
 import { CustonError } from "../../model/custonError";
 import projectsDatabase, { ProjectDatabase } from "../../project/dataBase/projectsDatabase";
-import uuid, { Uuid } from "../../services/Uuid";
 import taskDatabase, { TaskDatabase } from "../dataBase/taskDatabase";
 import { CreateTaskDto } from "../dto/createTaskDto";
 import { UpdateTaskDto } from "../dto/updatedTaskDto";
@@ -45,7 +44,6 @@ export class TaskBusiness {
 		try {
 			let tasks = await this.taskDatabase.FindAll();
 			tasks?.map((task) => {
-				task.deadLine = this.InverterDayYear(task.deadLine);
 				task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
 				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
 			});
@@ -62,7 +60,6 @@ export class TaskBusiness {
 				throw new CustonError(404, "task not found");
 			}
 
-			task.deadLine = this.InverterDayYear(task.deadLine);
 			task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
 			task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
 			return task;
@@ -80,7 +77,6 @@ export class TaskBusiness {
 
 			let tasks = await this.taskDatabase.FindByProject(id);
 			tasks?.map((task) => {
-				task.deadLine = this.InverterDayYear(task.deadLine);
 				task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
 				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
 			});
@@ -140,10 +136,6 @@ export class TaskBusiness {
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);
 		}
-	}
-
-	private InverterDayYear(date: string) {
-		return date.split("-").reverse().join("/");
 	}
 
 	private FormatLocalDate(date: Date) {

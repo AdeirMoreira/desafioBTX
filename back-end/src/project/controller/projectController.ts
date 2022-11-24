@@ -15,24 +15,24 @@ export class ProjectsController {
 		try {
 			const response = await this.projectsBusiness.Register(createProjectDto);
 
-			res.statusMessage = "project created successfully"
+			res.statusMessage = "project created successfully";
 			res.status(201).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
 		}
 	};
 
-	GetAll = async (req: Request, res: Response)=> {
+	GetAll = async (req: Request, res: Response) => {
 		try {
 			const response = await this.projectsBusiness.GetAll();
 			res.status(200).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
 		}
-	}
+	};
 
-	GetOne = async (req: Request, res: Response)=> {
-		const id : string = req.params.id
+	GetOne = async (req: Request, res: Response) => {
+		const id: string = req.params.id;
 
 		try {
 			const response = await this.projectsBusiness.GetOne(id);
@@ -40,15 +40,15 @@ export class ProjectsController {
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
 		}
-	}
+	};
 
 	Delete = async (req: Request, res: Response): Promise<void> => {
-		const id : string = req.params.id
+		const id: string = req.params.id;
 
 		try {
 			const response = await this.projectsBusiness.Delete(id);
 
-			res.statusMessage = "successfully deleted task"
+			res.statusMessage = "successfully deleted task";
 			res.status(200).send(response);
 		} catch (error: any) {
 			res.status(error.statusCode || 400).send({ message: error.message });
