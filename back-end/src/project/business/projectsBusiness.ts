@@ -55,7 +55,6 @@ export class ProjectsBusiness {
 			project.createdAt = this.FormatLocalDate(new Date(project.createdAt));
 			project.updatedAt = this.FormatLocalDate(new Date(project.updatedAt));
 
-			console.log(project)
 			return project;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode, error.message);

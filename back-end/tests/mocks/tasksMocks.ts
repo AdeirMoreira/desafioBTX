@@ -8,7 +8,7 @@ export const task1 = new Task(
     "12/12/2022",
     '2022-11-21T02:13:13.076Z',
     '2022-11-21T02:13:13.076Z',
-    "projectId1"
+    "Id1"
 )
 
 export const task2 = new Task(
@@ -19,5 +19,16 @@ export const task2 = new Task(
     "12/12/2022",
     '2022-11-21T02:15:15.076Z',
     '2022-11-21T02:13:13.076Z',
-    "projectId2"
+    "id5"
+)
+
+export const task3 = new Task(
+    "id3",
+    "name3",
+    "description3",
+    false,
+    "12/12/2022",
+    '2022-11-21T02:15:15.076Z',
+    '2022-11-21T02:13:13.076Z',
+    "id5"
 )
