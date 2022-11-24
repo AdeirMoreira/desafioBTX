@@ -4,8 +4,8 @@ Um projeto full-stack de app single page ToDo List. É possível cadastrar um pr
 
 ##  📸 Screenshots do site
 
-<  align="center">
-    <img src="" width="500" height="400">
+<p  align="center">
+    <img src="https://user-images.githubusercontent.com/98994187/203871490-413101e1-f5e8-489e-8bd2-d4e0228c1cf4.png" width="800" height="400">
 <p/>
 
 ## 🛠 Tecnologias
@@ -46,6 +46,10 @@ Duas tabelas Project e Tasks ligadas por uma relação de 1 para muitos em que u
 - updatedAt(datetime)
 - projectId(varchar) FK
 
+<p  align="center">
+    <img src="https://user-images.githubusercontent.com/98994187/203871574-3c83dc92-e776-443e-8cee-64f3f222dba7.png" width="300" height="200">
+<p/>
+
 ## 🔛 Rodando o Projeto
 
 ### ❗⚠ Pre-Requisitos 
@@ -76,15 +80,14 @@ npm run dev
 - Front-End 
 
 ```
-cd ../
-cd front-end
+cd ../front-end
 npm i
 npm run dev
 ```
 
-O Front-End abrirá no seu [localhost](http://localhost:5173/) na porta 5173.
+## 🔗 O site abrirá no link [To Do APP](http://localhost:5173/)
 
-O link base da API abrira em [localhost](http://localhost:3003/).
+
 
 ## 👨‍💻 Desenvolvedor
 <table>         
