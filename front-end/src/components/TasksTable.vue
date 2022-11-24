@@ -26,7 +26,7 @@ export default {
 	},
 	watch: {
 		projectSelectedId() {
-			this.requestgetTasksByProject();
+			this.requestGetTasksByProject();
 		},
 	},
 	methods: {
@@ -35,9 +35,9 @@ export default {
 		},
 		closeEditFields(task) {
 			this.select = "";
-			task.deadLine = task.deadLine.split("-").reverse().join("/");
+			this.requestUpdateTask(task);
 		},
-		requestgetTasksByProject() {
+		requestGetTasksByProject() {
 			axios
 				.get(`http://localhost:3003/task/project/${this.projectSelectedId}`)
 				.then((res) => {
@@ -47,20 +47,26 @@ export default {
 					console.log(error.response);
 				});
 		},
-		deleteTask(id){
-			this.removeTask(id)
-			this.requestDeleteTask(id)
+		deleteTask(id) {
+			this.removeTask(id);
+			this.requestDeleteTask(id);
 		},
-		requestDeleteTask(id){
+		requestDeleteTask(id) {
 			axios
 				.delete(`http://localhost:3003/task/${id}`)
 				.then((res) => {
-					console.log(res.data)
+					console.log(res.data);
 				})
 				.catch((error) => {
 					console.log(error.response);
 				});
-		}
+		},
+		requestUpdateTask(task) {
+			axios
+				.patch(`http://localhost:3003/task/${task.id}`,task)
+				.then((res) => console.log(res.data))
+				.catch((error) => console.log(error));
+		},
 	},
 };
 </script>
@@ -108,7 +114,7 @@ export default {
 					<input v-if="select === task.id" v-model="task.description" />
 				</th>
 				<th class="date-cell">
-					<p class="font" v-if="select !== task.id">{{ task.deadLine }}</p>
+					<p class="font" v-if="select !== task.id">{{ task.deadLine.split("-").reverse().join("/") }}</p>
 					<input type="date" v-if="select === task.id" v-model="task.deadLine" />
 				</th>
 				<th class="checkbox-cell">

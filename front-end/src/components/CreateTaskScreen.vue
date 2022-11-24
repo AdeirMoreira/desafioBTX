@@ -33,7 +33,7 @@ export default {
 					id,
 					name: this.name,
 					description: this.description,
-					deadLine: this.deadLine.split("-").reverse().join("/"),
+					deadLine: this.deadLine,
 					completed: this.completed,
 				});
 			}
