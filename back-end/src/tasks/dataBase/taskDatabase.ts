@@ -1,7 +1,6 @@
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../data-source/data-source";
 import { CustonError } from "../../model/custonError";
-import { UpdateTaskDto } from "../dto/updatedTaskDto";
 import { Task } from "../entity/task.entity";
 
 export class TaskDatabase {
@@ -13,8 +12,6 @@ export class TaskDatabase {
 
 			const repository = this.getProjectRepository();
 			const result = await repository.save(newTask);
-
-			await this.closeConnection();
 
 			return result;
 		} catch (error: any) {
@@ -29,8 +26,6 @@ export class TaskDatabase {
 			const repository = this.getProjectRepository();
 			const tasks = await repository.find();
 
-			await this.closeConnection();
-
 			return tasks;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
@@ -43,8 +38,6 @@ export class TaskDatabase {
 
 			const repository = this.getProjectRepository();
 			const task = await repository.findOne({ where: { id } });
-
-			await this.closeConnection();
 
 			return task;
 		} catch (error: any) {
@@ -59,8 +52,6 @@ export class TaskDatabase {
 			const repository = this.getProjectRepository();
 			const tasks = await repository.find({where: {projectId:id}});
 
-			await this.closeConnection();
-
 			return tasks;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
@@ -74,7 +65,6 @@ export class TaskDatabase {
 			const repository = this.getProjectRepository();
 			await repository.update(id, updatedTask);
 
-			await this.closeConnection();
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
@@ -87,7 +77,6 @@ export class TaskDatabase {
 			const repository = this.getProjectRepository();
 			await repository.delete({ id });
 
-			await this.closeConnection();
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
@@ -99,9 +88,6 @@ export class TaskDatabase {
 
 	private async openConnection(): Promise<void> {
 		!this.appDataSource.isInitialized && (await this.appDataSource.initialize());
-	}
-	private async closeConnection(): Promise<void> {
-		this.appDataSource.isInitialized && (await this.appDataSource.destroy());
 	}
 }
 

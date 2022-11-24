@@ -13,8 +13,6 @@ export class ProjectDatabase {
 			const repository = this.getProjectRepository();
 			const result = await repository.save(newProject);
 
-			await this.closeConnection();
-
 			return result;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
@@ -28,7 +26,6 @@ export class ProjectDatabase {
 			const repository = this.getProjectRepository();
 			const projects = await repository.find();
 
-			await this.closeConnection();
 
 			return projects;
 		} catch (error: any) {
@@ -43,8 +40,6 @@ export class ProjectDatabase {
 			const repository = this.getProjectRepository();
 			const project = await repository.findOne({ where: { id } });
 
-			await this.closeConnection();
-
 			return project;
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
@@ -58,7 +53,6 @@ export class ProjectDatabase {
 			const repository = this.getProjectRepository();
 			await repository.delete({ id });
 
-			await this.closeConnection();
 		} catch (error: any) {
 			throw new CustonError(error.statusCode || 500, error.sqlMessage || error.message);
 		}
@@ -70,9 +64,6 @@ export class ProjectDatabase {
 
 	private async openConnection(): Promise<void> {
 		!this.appDataSource.isInitialized && (await this.appDataSource.initialize());
-	}
-	private async closeConnection(): Promise<void> {
-		this.appDataSource.isInitialized && (await this.appDataSource.destroy());
 	}
 }
 
