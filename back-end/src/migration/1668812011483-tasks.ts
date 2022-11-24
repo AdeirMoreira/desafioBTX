@@ -1,9 +1,8 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm"
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class tasks1668812011483 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.createTable(
+	public async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.createTable(
 			new Table({
 				name: "Tasks",
 				columns: [
@@ -20,14 +19,14 @@ export class tasks1668812011483 implements MigrationInterface {
 						name: "description",
 						type: "text",
 					},
-                    {
-                        name: "completed",
-                        type: "boolean"
-                    },
-                    {
-                        name: "deadLine",
-                        type: "date"
-                    },
+					{
+						name: "completed",
+						type: "boolean",
+					},
+					{
+						name: "deadLine",
+						type: "date",
+					},
 					{
 						name: "createdAt",
 						type: "timestamp",
@@ -39,10 +38,9 @@ export class tasks1668812011483 implements MigrationInterface {
 				],
 			})
 		);
-    }
+	}
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('Tasks')
-    }
-
+	public async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.dropTable("Tasks");
+	}
 }

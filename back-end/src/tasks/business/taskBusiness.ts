@@ -45,7 +45,7 @@ export class TaskBusiness {
 		try {
 			let tasks = await this.taskDatabase.FindAll();
 			tasks?.map((task) => {
-				task.deadline = this.InverterDayYear(task.deadline)
+				task.deadLine = this.InverterDayYear(task.deadLine);
 				task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
 				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
 			});
@@ -62,7 +62,7 @@ export class TaskBusiness {
 				throw new CustonError(404, "task not found");
 			}
 
-			task.deadline = this.InverterDayYear(task.deadline)
+			task.deadLine = this.InverterDayYear(task.deadLine);
 			task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
 			task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
 			return task;
@@ -80,7 +80,7 @@ export class TaskBusiness {
 
 			let tasks = await this.taskDatabase.FindByProject(id);
 			tasks?.map((task) => {
-				task.deadline = this.InverterDayYear(task.deadline)
+				task.deadLine = this.InverterDayYear(task.deadLine);
 				task.createdAt = this.FormatLocalDate(new Date(task.createdAt));
 				task.updatedAt = this.FormatLocalDate(new Date(task.updatedAt));
 			});
@@ -102,7 +102,7 @@ export class TaskBusiness {
 
 			task.name = updateTaskDto.name || task.name;
 			task.description = updateTaskDto.description || task.description;
-			task.deadline = updateTaskDto.deadLine || task.deadline;
+			task.deadLine = updateTaskDto.deadLine || task.deadLine;
 			task.completed = updateTaskDto.completed || task.completed;
 
 			task.updatedAt = new Date().toISOString();
@@ -142,7 +142,7 @@ export class TaskBusiness {
 		}
 	}
 
-	private InverterDayYear(date:string){
+	private InverterDayYear(date: string) {
 		return date.split("-").reverse().join("/");
 	}
 

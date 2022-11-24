@@ -116,7 +116,7 @@ describe("class TaskBusiness test", () => {
 				await taskBusinessMock.Register(badTask);
 			} catch (error: any) {
 				expect(error.message).toBe(
-					"task deadline must be a string and a deadline for the task is required."
+					"task deadLine must be a string and a deadLine for the task is required."
 				);
 				expect(error.statusCode).toBe(422);
 			}
@@ -128,7 +128,7 @@ describe("class TaskBusiness test", () => {
 			try {
 				await taskBusinessMock.Register(badTask);
 			} catch (error: any) {
-				expect(error.message).toBe("a deadline for the task is required.");
+				expect(error.message).toBe("a deadLine for the task is required.");
 				expect(error.statusCode).toBe(422);
 			}
 		});
@@ -144,7 +144,7 @@ describe("class TaskBusiness test", () => {
 			try {
 				await taskBusinessMock.Register(badTask);
 			} catch (error: any) {
-				expect(error.message).toBe("task deadline must be a string.");
+				expect(error.message).toBe("task deadLine must be a string.");
 				expect(error.statusCode).toBe(422);
 			}
 		});
@@ -153,7 +153,7 @@ describe("class TaskBusiness test", () => {
 			const badTask = new CreateTaskDto(
 				"name",
 				"description",
-				"deadline",
+				"deadLine",
 				null as unknown as string
 			);
 
@@ -162,19 +162,21 @@ describe("class TaskBusiness test", () => {
 			} catch (error: any) {
 				expect(error.message).toBe(
 					"the id of the project the task belongs to must be a string " +
-                    "and the id of the project to which the task belongs is required."
+						"and the id of the project to which the task belongs is required."
 				);
 				expect(error.statusCode).toBe(422);
 			}
 		});
 
 		it("empety task project test", async () => {
-			const badTask = new CreateTaskDto("name", "description", "deadline", "");
+			const badTask = new CreateTaskDto("name", "description", "deadLine", "");
 
 			try {
 				await taskBusinessMock.Register(badTask);
 			} catch (error: any) {
-				expect(error.message).toBe("the id of the project to which the task belongs is required.");
+				expect(error.message).toBe(
+					"the id of the project to which the task belongs is required."
+				);
 				expect(error.statusCode).toBe(422);
 			}
 		});
@@ -183,127 +185,123 @@ describe("class TaskBusiness test", () => {
 			const badTask = new CreateTaskDto(
 				"name",
 				"description",
-				"deadline",
+				"deadLine",
 				false as unknown as string
 			);
 
 			try {
 				await taskBusinessMock.Register(badTask);
 			} catch (error: any) {
-				expect(error.message).toBe("the id of the project the task belongs to must be a string.");
+				expect(error.message).toBe(
+					"the id of the project the task belongs to must be a string."
+				);
 				expect(error.statusCode).toBe(422);
 			}
 		});
 	});
 
-    describe("GetAll method test", () => {
+	describe("GetAll method test", () => {
 		it("return all tasks with formated date test", async () => {
-			const response = await taskBusinessMock.GetAll()
-			expect(response[0]?.id).toBe('id1')
-			expect(response[1]?.name).toBe('name2')
-			expect(response[0]?.description).toBe("description1")
-            expect(response[0]?.deadline).toBe('12/12/2022')
-			expect(response[1]?.createdAt).toBe('20/11/2022 23:15:15')
-			expect(response[0]?.updatedAt).toBe('20/11/2022 23:13:13')
-		})
-	})
+			const response = await taskBusinessMock.GetAll();
+			expect(response[0]?.id).toBe("id1");
+			expect(response[1]?.name).toBe("name2");
+			expect(response[0]?.description).toBe("description1");
+			expect(response[0]?.deadLine).toBe("12/12/2022");
+			expect(response[1]?.createdAt).toBe("20/11/2022 23:15:15");
+			expect(response[0]?.updatedAt).toBe("20/11/2022 23:13:13");
+		});
+	});
 
-    describe("GetOne method test", () => {
+	describe("GetOne method test", () => {
 		it("return one task test with formated date test", async () => {
-			const response = await taskBusinessMock.GetOne("id2")
-			expect(response?.id).toBe('id2')
-			expect(response?.name).toBe('name2')
-			expect(response?.description).toBe("description2")
-            expect(response?.deadline).toBe('12/12/2022')
-			expect(response?.createdAt).toBe('20/11/2022 23:15:15')
-			expect(response?.updatedAt).toBe('20/11/2022 23:13:13')
-		})
-
-		it('task not found test', async () => {
-			try {
-				await taskBusinessMock.GetOne('oalkasdlksalkdfm')
-			} catch (error:any) {
-				expect(error.message).toBe(
-					"task not found"
-				);
-				expect(error.statusCode).toBe(404);
-			}
-		})
-	})
-
-    describe('Update method test', () => {
-        it('invalid name and description task test', async () => {
-            const badUpdated = new UpdateTaskDto(
-                false as unknown as string,
-                5 as unknown as string,
-                '12/12/2022',
-                true,
-                )
-            try {
-                await taskBusinessMock.Update(badUpdated, 'id2')
-            } catch (error:any) {
-                expect(error.message).toBe("task name must be a string and task description must be a string.");
-				expect(error.statusCode).toBe(422);
-            }
-        })
-
-        it('name, description and deadline is optional test', async () => {
-            const goodUpdated = new UpdateTaskDto(
-                null as unknown as string,
-                null as unknown as string,
-                null as unknown as string,
-                true,
-                )
-                const response = await taskBusinessMock.Update(goodUpdated, 'id2')
-                expect(response).toBeFalsy()
-            
-        })
-
-        it('task not found test', async () => {
-            const goodUpdated = new UpdateTaskDto(
-                null as unknown as string,
-                null as unknown as string,
-                null as unknown as string,
-                false,
-                )
-                try {
-                    await taskBusinessMock.Update(goodUpdated, 'id2')
-                } catch (error:any) {
-                    expect(error.message).toBe(
-                        "task not found"
-                    );
-                    expect(error.statusCode).toBe(404);
-                }
-        })
-
-        it('update sucess test', async () => {
-            const goodUpdated = new UpdateTaskDto(
-                null as unknown as string,
-                "update task description",
-                null as unknown as string,
-                true,
-                )
-                const response = await taskBusinessMock.Update(goodUpdated, 'id2')
-                expect(response).toBeFalsy()
-            
-        })
-    })
-
-	describe("Delete method test", () => {
-		it("delete sucess test", async () => {
-			const response = await taskBusinessMock.Delete('id2')
-			expect(response).toBeFalsy()
-		})
+			const response = await taskBusinessMock.GetOne("id2");
+			expect(response?.id).toBe("id2");
+			expect(response?.name).toBe("name2");
+			expect(response?.description).toBe("description2");
+			expect(response?.deadLine).toBe("12/12/2022");
+			expect(response?.createdAt).toBe("20/11/2022 23:15:15");
+			expect(response?.updatedAt).toBe("20/11/2022 23:13:13");
+		});
 
 		it("task not found test", async () => {
 			try {
-				await taskBusinessMock.Delete('asdkasdnasd')
-			} catch (error:any) {
-				expect(error.message).toBe(
-					"task not found"
-				);
+				await taskBusinessMock.GetOne("oalkasdlksalkdfm");
+			} catch (error: any) {
+				expect(error.message).toBe("task not found");
 				expect(error.statusCode).toBe(404);
 			}
-		})
-	})
+		});
+	});
+
+	describe("Update method test", () => {
+		it("invalid name and description task test", async () => {
+			const badUpdated = new UpdateTaskDto(
+				false as unknown as string,
+				5 as unknown as string,
+				"12/12/2022",
+				true
+			);
+			try {
+				await taskBusinessMock.Update(badUpdated, "id2");
+			} catch (error: any) {
+				expect(error.message).toBe(
+					"task name must be a string and task description must be a string."
+				);
+				expect(error.statusCode).toBe(422);
+			}
+		});
+
+		it("name, description and deadLine is optional test", async () => {
+			const goodUpdated = new UpdateTaskDto(
+				null as unknown as string,
+				null as unknown as string,
+				null as unknown as string,
+				true
+			);
+			const response = await taskBusinessMock.Update(goodUpdated, "id2");
+			expect(response).toBeFalsy();
+		});
+
+		it("task not found test", async () => {
+			const goodUpdated = new UpdateTaskDto(
+				null as unknown as string,
+				null as unknown as string,
+				null as unknown as string,
+				false
+			);
+			try {
+				await taskBusinessMock.Update(goodUpdated, "id2");
+			} catch (error: any) {
+				expect(error.message).toBe("task not found");
+				expect(error.statusCode).toBe(404);
+			}
+		});
+
+		it("update sucess test", async () => {
+			const goodUpdated = new UpdateTaskDto(
+				null as unknown as string,
+				"update task description",
+				null as unknown as string,
+				true
+			);
+			const response = await taskBusinessMock.Update(goodUpdated, "id2");
+			expect(response).toBeFalsy();
+		});
+	});
+
+	describe("Delete method test", () => {
+		it("delete sucess test", async () => {
+			const response = await taskBusinessMock.Delete("id2");
+			expect(response).toBeFalsy();
+		});
+
+		it("task not found test", async () => {
+			try {
+				await taskBusinessMock.Delete("asdkasdnasd");
+			} catch (error: any) {
+				expect(error.message).toBe("task not found");
+				expect(error.statusCode).toBe(404);
+			}
+		});
+	});
 });
