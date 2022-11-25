@@ -1,4 +1,3 @@
-import
 <script>
 import { useProjectStore } from "../stores/projects";
 import axios from "axios";
