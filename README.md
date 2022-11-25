@@ -57,15 +57,15 @@ Duas tabelas Project e Tasks ligadas por uma relação de 1 para muitos em que u
 - [Node](https://nodejs.org/en/docs/) instalado na sua maquina.
 -  Um banco de dados [MySQL](https://www.mysql.com/).
 
-### 🍲 Preparando o ambiente
-
-Renomeie o arquivo ```.env.example``` para ```.env``` e preencha as variáveis com seus dados do banco de dados MySQL. É muito importante para a execução do servidor.
-
 ### ⬇ Baixar
 
 ```
 git clone https://github.com/AdeirMoreira/desafioBTX.git
 ```
+
+### 🍲 Preparando o ambiente
+
+Renomeie o arquivo ```.env.example``` para ```.env``` e preencha as variáveis com seus dados do banco de dados MySQL. É muito importante para a execução do servidor.
 
 ### 🖥 Instalar
 
