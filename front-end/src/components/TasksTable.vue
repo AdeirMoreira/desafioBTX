@@ -23,16 +23,16 @@ export default {
 			projectSelectedId,
 			setTasks,
 			deletedProjectId,
-			removeAllTasksByProject
+			removeAllTasksByProject,
 		};
 	},
 	watch: {
 		projectSelectedId() {
 			this.requestGetTasksByProject();
 		},
-		deletedProjectId(){
-			this.removeAllTasksByProject(this.deletedProjectId)
-		}
+		deletedProjectId() {
+			this.removeAllTasksByProject(this.deletedProjectId);
+		},
 	},
 	methods: {
 		openEditFields(id) {
@@ -68,7 +68,7 @@ export default {
 		},
 		requestUpdateTask(task) {
 			axios
-				.patch(`http://localhost:3003/task/${task.id}`,task)
+				.patch(`http://localhost:3003/task/${task.id}`, task)
 				.then((res) => console.log(res.data))
 				.catch((error) => console.log(error));
 		},
@@ -119,12 +119,20 @@ export default {
 					<input v-if="select === task.id" v-model="task.description" />
 				</th>
 				<th class="date-cell">
-					<p class="font" v-if="select !== task.id">{{ task.deadLine.split("-").reverse().join("/") }}</p>
+					<p class="font" v-if="select !== task.id">
+						{{ task.deadLine.split("-").reverse().join("/") }}
+					</p>
 					<input type="date" v-if="select === task.id" v-model="task.deadLine" />
 				</th>
-				<th class="checkbox-cell">
+				<th
+					:class="{
+						'checkbox-cell': true,
+						completed: task.completed,
+						uncompletd: !task.completed,
+					}"
+				>
 					<p class="font" v-if="select !== task.id">
-						{{ task.completed ? "concluída" : "pendente" }}
+						{{ task.completed ? "Concluída" : "Pendente" }}
 					</p>
 					<input type="checkbox" v-model="task.completed" v-if="select === task.id" />
 				</th>
@@ -167,6 +175,14 @@ export default {
 }
 .date-cell {
 	width: 20%;
+}
+.completed {
+	background-color: rgb(0, 193, 102);
+	color: white;
+	
+}
+.uncompletd {
+	background-color: darkorange;
 }
 .checkbox-cell {
 	width: 15%;
