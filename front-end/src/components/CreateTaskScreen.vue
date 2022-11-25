@@ -18,25 +18,27 @@ export default {
 
 	methods: {
 		closeScreen() {
-			if (this.name !== "" && this.description !== "" && this.deadLine !== "") {
-				this.$emit("close");
-				const id = uuid();
-				this.requestCreateTask({
-					id,
-					name: this.name,
-					description: this.description,
-					deadLine: this.deadLine,
-					completed: this.completed,
-					projectId: this.projectSelectedId,
-				});
-				this.addTask({
-					id,
-					name: this.name,
-					description: this.description,
-					deadLine: this.deadLine,
-					completed: this.completed,
-				});
+			!this.projectSelectedId && this.emitCloseScreenEvent();
+			if (this.projectSelectedId && this.name && this.description && this.deadLine) {
+				const newTask = this.buildNewTask();
+				this.requestCreateTask(newTask);
+				this.addTask(newTask);
+				this.emitCloseScreenEvent();
 			}
+		},
+		emitCloseScreenEvent() {
+			this.$emit("close");
+		},
+		buildNewTask() {
+			const id = uuid();
+			return {
+				id,
+				name: this.name,
+				description: this.description,
+				deadLine: this.deadLine,
+				completed: this.completed,
+				projectId: this.projectSelectedId,
+			};
 		},
 		requestCreateTask(task) {
 			axios
@@ -63,20 +65,23 @@ export default {
 
 <template>
 	<div class="create-task-screen">
-		<div class="input-container">
+		<div class="screen-container">
 			<div class="window-title">
 				<span>Tarefa</span>
 				<button class="close-screen-button" @click="closeScreen()">
 					<img src="../assets/resources/tickIcon.png" alt="Icone de tick" />
 				</button>
 			</div>
-			<div class="inputs-area">
+			<div class="inputs-container" v-if="projectSelectedId">
 				<p>Nome</p>
 				<input type="text" v-model="name" />
 				<p>Descrição</p>
 				<input type="text" v-model="description" />
 				<p>Prazo</p>
 				<input type="date" v-model="deadLine" />
+			</div>
+			<div class="message-container" v-if="!projectSelectedId">
+				<p>Por favor selecione um projeto ao qual deseja adicionar uma tarefa</p>
 			</div>
 		</div>
 	</div>
@@ -95,7 +100,7 @@ export default {
 	align-items: center;
 }
 
-.input-container {
+.screen-container {
 	display: flex;
 	flex-direction: column;
 	background-color: white;
@@ -120,14 +125,14 @@ export default {
 	height: 3.5em;
 	width: 3.5em;
 }
-.inputs-area {
+.inputs-container {
 	display: flex;
 	flex-direction: column;
 	gap: 1em;
 	padding: 1em;
 }
 
-.inputs-area p {
+.inputs-container p {
 	font-size: 2em;
 	font-weight: 700;
 }
@@ -136,8 +141,21 @@ export default {
 	background-color: transparent;
 	border: none;
 }
-.inputs-area input {
+.inputs-container input {
 	font-size: 1.5em;
 	padding: 1em;
+}
+
+.message-container {
+	width: 50em;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 1em;
+}
+
+.message-container p {
+	font-size: 2em;
+	font-weight: 700;
 }
 </style>
