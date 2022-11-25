@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "clear && ts-node-dev ./src/index.ts",
+    "dev": "ts-node-dev ./src/index.ts",
     "start": "node ./build/src/index.js",
     "test": "jest",
     "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/data-source/data-source.ts",
