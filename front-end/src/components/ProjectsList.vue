@@ -23,7 +23,7 @@ export default {
 		};
 	},
 	methods: {
-		deleteProject(id) {
+		removeProjectMethod(id) {
 			this.requestDeleteProject(id);
 			this.removeProject(id);
 		},
@@ -74,7 +74,7 @@ export default {
 		</div>
 		<button
 			:class="{ 'project-container-selected': selected === project.id }"
-			@click="deleteProject(project.id)"
+			@click="removeProjectMethod(project.id)"
 			type="button"
 		>
 			<img src="../assets/resources/delete.png" alt="icone de lixeira" />

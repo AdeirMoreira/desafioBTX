@@ -23,5 +23,8 @@ export const useTasksStore = defineStore("task", {
 		removeTask(id) {
 			this.tasks = this.tasks.filter((task) => task.id !== id);
 		},
+		removeAllTasksByProject(id){
+			this.tasks = this.tasks.filter(task => task.projectId !== id)
+		}
 	},
 });

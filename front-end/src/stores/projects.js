@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 
 export const useProjectStore = defineStore("project", {
-	state: () => ({ projects: [], projectSelectedId: null }),
+	state: () => ({ projects: [], projectSelectedId: null, deletedProjectId: null }),
 
 	getters: {
 		getProjects: (state) => state.projects,
 		getProjectSelected: (state) => state.projectSelectedId,
+		getProjectSelected: (state) => state.deletedProjectId,
 	},
 
 	actions: {
@@ -17,9 +18,13 @@ export const useProjectStore = defineStore("project", {
 		},
 		removeProject(id) {
 			this.projects = this.projects.filter((project) => project.id !== id);
+			this.setDeletedProjectId(id)
 		},
         setProjectSelected(id){
             this.projectSelectedId = id
+        },
+		setDeletedProjectId(id){
+            this.deletedProjectId = id
         }
 	},
 });

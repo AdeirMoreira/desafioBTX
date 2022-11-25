@@ -15,19 +15,24 @@ export default {
 		const taskStore = useTasksStore();
 		const projectStore = useProjectStore();
 		const { getTasks } = storeToRefs(taskStore);
-		const { projectSelectedId } = storeToRefs(projectStore);
-		const { removeTask, setTasks } = taskStore;
+		const { projectSelectedId, deletedProjectId } = storeToRefs(projectStore);
+		const { removeTask, setTasks, removeAllTasksByProject } = taskStore;
 		return {
 			getTasks,
 			removeTask,
 			projectSelectedId,
 			setTasks,
+			deletedProjectId,
+			removeAllTasksByProject
 		};
 	},
 	watch: {
 		projectSelectedId() {
 			this.requestGetTasksByProject();
 		},
+		deletedProjectId(){
+			this.removeAllTasksByProject(this.deletedProjectId)
+		}
 	},
 	methods: {
 		openEditFields(id) {
