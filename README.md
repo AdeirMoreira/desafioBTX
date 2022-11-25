@@ -72,7 +72,7 @@ git clone https://github.com/AdeirMoreira/desafioBTX.git
 - Back-End 
 
 ```
-cd back-end 
+cd desafioBTX/back-end/
 npm i
 npm run dev
 ```
