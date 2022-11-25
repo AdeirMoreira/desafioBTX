@@ -1,4 +1,4 @@
-# 🚗 DESAFIO BTX 🏍
+# 🚗 Desafio BTX 🏍
 
 Um projeto full-stack de app single page ToDo List. É possível cadastrar um projeto e registrar as tarefas que deve ser realizadas, assim como um prazo e se elas foram concluídas ou não. Também é possível editar e deltar tarefas e projetos. O Projeto foi desenvolvido com Vue JS no front e com node JS no back-end, além do banco de dados MySQL.
 
@@ -55,7 +55,8 @@ Duas tabelas Project e Tasks ligadas por uma relação de 1 para muitos em que u
 ### ❗⚠ Pre-Requisitos 
 
 - [Node](https://nodejs.org/en/docs/) instalado na sua maquina.
--  Um banco de dados [MySQL](https://www.mysql.com/).
+- Um banco de dados [MySQL](https://www.mysql.com/).
+- [Docker](https://www.docker.com/) (OPCIONAL)
 
 ### ⬇ Baixar
 
@@ -65,22 +66,36 @@ git clone https://github.com/AdeirMoreira/desafioBTX.git
 
 ### 🍲 Preparando o ambiente
 
-Renomeie o arquivo ```.env.example``` para ```.env``` e preencha as variáveis com seus dados do banco de dados MySQL. É muito importante para a execução do servidor.
+```
+cd desafioBTX/back-end/
+```
+
+Renomeie o arquivo ```.env.example``` para ```.env``` e altere as variáveis com seus dados do banco de dados MySQL.
+
+### 🗃 Banco de dados - Docker 🐳
+
+Se você for usar o seu banco de dados MySQL, basta alterar as variaveis de ambiente no arquivo .env com seu dados. Entretanto, se você não tem ou não quer usar o seu banco de dados e tiver o docker instalado em sua maquina, poderá subir um container docker com um banco de dados MySQL para usar no back-end.
+
+Para subir o container com o banco de dados MySQL, renomeie o arquivo ```.env.example``` para ```.env```, caso ainda não tenha feito, depois dê o seguinte comando:
+
+```
+docker compose up
+```
 
 ### 🖥 Instalar
 
 - Back-End 
 
 ```
-cd desafioBTX/back-end/
 npm i
+npm run migration:run
 npm run dev
 ```
 
 - Front-End 
 
 ```
-cd ../front-end
+cd desafioBTX/front-end
 npm i
 npm run dev
 ```
